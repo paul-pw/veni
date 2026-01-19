@@ -1,0 +1,7 @@
+[submodule "ns_reni"]
+	path = ns_reni
+	url = git@github.com:JADGardner/ns_reni.git
+
+[submodule "nerfstudio"]
+	path = nerfstudio
+	url = git@github.com:nerfstudio-project/nerfstudio.git
