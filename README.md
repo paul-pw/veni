@@ -71,7 +71,7 @@ pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"
 - `-lcuda not found` 
   - Solution: `ln -s {cuda directory}/lib/stubs/libcuda.so {cuda directory}/lib/libcuda.so`
 
-# Train Model:
+## Train the model:
 
 To train our VENI Model, run:
 
@@ -79,7 +79,7 @@ To train our VENI Model, run:
 
 in the root directory of this repository.
 
-# Platform
+## Platform
 
 The code is confirmed to work on the following platform:
 
