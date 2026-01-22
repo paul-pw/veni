@@ -1,20 +1,21 @@
 # VENI
 
-**[Project Page](https://paul-pw.github.io/veni/)**
+**[Project Page](https://paul-pw.github.io/veni/) | [Paper](https://arxiv.org/abs/2601.14079)**
 
 If you find VENI useful for your work please cite:
 
 ```
 @misc{walker2026veni,
-  author        = {Paul Walker and James A. D. Gardner and Andreea Ardelean and William A. P. Smith and Bernhard Egger},
-  title         = {VENI: Variational Encoder for Natural Illumination},
-  eprint        = {},
-  archivePrefix = {},
-  primaryClass  = {},
-  year          = {2026},
-  month         = {Jan}
+  title={VENI: Variational Encoder for Natural Illumination}, 
+  author={Paul Walker and James A. D. Gardner and Andreea Ardelean and William A. P. Smith and Bernhard Egger},
+  year={2026},
+  eprint={2601.14079},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2601.14079}, 
 }
 ```
+
 ## Installation
 
 We build on top of Nerfstudio. However, since Nerfstudio is still in very active development with fairly large codebase changes still occurring compatibility might be an issue. Pull requests and issues are very welcome.
