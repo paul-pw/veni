@@ -11,13 +11,13 @@ from nerfstudio.cameras.cameras import Cameras, CameraType
 from nerfstudio.utils import colormaps, misc
 
 from veni.configs.veni_gon_config import VENIGon
-from veni.configs.veni_ae_config import VENI
+from veni.configs.veni_config import VENI
 from reni.configs.reni_config import RENIField
 from reni.configs.sh_sg_envmap_configs import SHField, SGField
 from veni.pipelines.veni_gon_pipeline import VENIGONPipeline
 #from reni.field_components.field_heads import RENIFieldHeadNames
 from reni.data.datamanagers.reni_datamanager import RENIDataManager
-from veni.data.veni_pixel_sampler import VENIEquirectangularPixelSamplerConfig,VENIEquirectangularPixelSampler
+from reni.data.reni_pixel_sampler import RENIEquirectangularPixelSamplerConfig,RENIEquirectangularPixelSampler
 from reni.utils.utils import find_nerfstudio_project_root, rot_z, rot_y
 #from reni.utils.colourspace import linear_to_sRGB
 #import functools
@@ -29,7 +29,7 @@ from typing import Literal
 #project_root = find_nerfstudio_project_root(Path(os.getcwd()))
 #os.chdir(project_root)
 from nerfstudio.data.datamanagers.base_datamanager import VanillaDataManagerConfig
-from reni.model_components.loss_schedulers import ConstantLossWeightConfig, LinearLossWeightSchedulerConfig
+from veni.model_components.loss_schedulers import ConstantLossWeightConfig, LinearLossWeightSchedulerConfig
 
 
 # setup config
@@ -55,7 +55,7 @@ def load_model(
       datapath = Path("../data/RENI_HDR").absolute(), 
       custom_division_factor=None, 
       variational=False, 
-      model_type: Literal['VENIGon', 'RENI', 'VENI']="VENI",
+      model_type: Literal['RENIGon', 'RENI', 'VENI']="RENIGon",
       model_only = False,
       metadata={},
       num_train_data=None, 
@@ -84,9 +84,9 @@ def load_model(
         content = f.read()
         config = clean_and_load_yaml(content)
     
-    if model_type == "VENIGon":
+    if model_type == "RENIGon":
         print("using ReniGON")
-        model_config = VENIGon.config
+        model_config = RENIGon.config
         if "field.train_mu" in reni_model_dict:
             del reni_model_dict["field.train_mu"]
         if "field.train_logvar" in reni_model_dict:
@@ -99,9 +99,9 @@ def load_model(
         print("using Reni++")
         model_config = RENIField.config
         model_config.pipeline.model.field.old_implementation = config['pipeline']['model']['field']['old_implementation']
-    elif model_type == "VENIAE":
-        print("using VENIAE")
-        model_config = VENIAE.config
+    elif model_type == "VENI":
+        print("using VENI")
+        model_config = VENI.config
     else:
         raise ValueError("not a valid model_type")
 
@@ -110,6 +110,7 @@ def load_model(
     model_config.pipeline.datamanager.dataparser.data = datapath
 
     
+    # TODO maybe make this configurable:
     maskpath = os.path.join(datapath, "masks")
 
     model_config.pipeline.datamanager.dataparser.convert_to_ldr = config['pipeline']['datamanager']['dataparser']['convert_to_ldr']
@@ -148,7 +149,7 @@ def load_model(
     model_config.pipeline.model.field.last_layer_linear = config['pipeline']['model']['field']['last_layer_linear']
     model_config.pipeline.model.loss_coefficients = config['pipeline']['model']['loss_coefficients']
 
-    if model_type!="VENIAE":
+    if model_type!="VENI":
         model_config.pipeline.model.field.trainable_scale = config['pipeline']['model']['field']['trainable_scale']
 
     if model_type!="RENI":
@@ -167,7 +168,7 @@ def load_model(
                 scheduler = LinearLossWeightSchedulerConfig(start_weight=v["start_weight"], end_weight=v["end_weight"], start_step=v["start_step"], end_step=v["end_step"])
             model_config.pipeline.model.loss_coefficients[k] = scheduler
     
-    if model_type=="VENIAE":
+    if model_type=="VENI":
         model_config.pipeline.model.encoder.pooling = config['pipeline']['model']["encoder"]['pooling']
         model_config.pipeline.model.encoder.lernable_cls = config['pipeline']['model']["encoder"]['learnable_cls']
         model_config.pipeline.model.encoder.invariant_axes = config['pipeline']['model']["encoder"]['invariant_axes']

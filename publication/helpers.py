@@ -2,13 +2,13 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 import torch
-from reni.utils.helpers import load_model, device
+from veni.utils.helpers import load_model, device
 from reni.utils.utils import find_nerfstudio_project_root
 import functools
 from nerfstudio.data.utils.dataloaders import FixedIndicesEvalDataloader
 from pathlib import Path
 from reni.data.datasets.reni_dataset import RENIDataset
-from veni.data.veni_pixel_sampler import VENIEquirectangularPixelSamplerConfig
+from reni.data.reni_pixel_sampler import RENIEquirectangularPixelSamplerConfig
 from typing_extensions import Literal
 import pandas as pd
 import os
@@ -43,14 +43,36 @@ def get_newest_model(path: str):
 
 
 models = [
-    {"model": "outputs/ae_140/reni-ae/", "name": "Our Model 100", "model_type":"RENIAE"},
-    {"model": "outputs/ae_139/reni-ae/", "name": "Our Model 49", "model_type":"RENIAE"},
-    {"model": "outputs/ae_138/reni-ae/", "name": "Our Model 9", "model_type":"RENIAE"},
+    # non finetuned models
+    #{"model": "outputs/ae_52/reni-ae/", "name": "RENI vAE latent 100 KLD 1e-1", "model_type":"VENI"},
+    #{"model": "outputs/ae_69/reni-ae/", "name": "RENI vAE latent 49 KLD 1e-1", "model_type":"VENI"},
+    #{"model": "outputs/ae_70/reni-ae/", "name": "RENI vAE latent 9 KLD 1e-1", "model_type":"VENI"},
+    
+    
+    #{"model": "outputs/ae_59/reni-ae/", "name": "RENI vAE latent 100 KLD 1e-2", "model_type":"VENI"},
+    #{"model": "outputs/ae_60/reni-ae/", "name": "RENI overfit1", "model_type":"VENI"},
+    #{"model": "outputs/ae_61/reni-ae/", "name": "RENI AE latent 49", "model_type":"VENI"},
+    #{"model": "outputs/ae_62/reni-ae/", "name": "RENI AE latent 9", "model_type":"VENI"},
+
+    # finetuned models
+    #{"model": "outputs/ae_72/reni-ae/", "name": "RENI overfit", "model_type":"VENI"},
+    #{"model": "outputs/ae_73/reni-ae/", "name": "RENI vAE KLD 1e-3", "model_type":"VENI"},
+    #{"model": "outputs/ae_74/reni-ae/", "name": "RENI vAE KLD 1e-2", "model_type":"VENI"},
+    #{"model": "outputs/ae_75/reni-ae/", "name": "RENI vAE KLD 1e-1", "model_type":"VENI"},
+    #{"model": "outputs/ae_76/reni-ae/", "name": "RENI vAE latent 49 kld 1e-2", "model_type":"VENI"},
+    #{"model": "outputs/ae_77/reni-ae/", "name": "RENI vAE latent 9 kld 1e-2", "model_type":"VENI"},
+    #{"model": "outputs/ae_77/reni-ae/", "name": "old Our Model 9", "model_type":"VENI"},
+    #{"model": "outputs/ae_76/reni-ae/", "name": "old Our Model 49", "model_type":"VENI"},
+    #{"model": "outputs/ae_74/reni-ae/", "name": "old Our Model 100", "model_type":"VENI"},
+    
+    #{"model": "outputs/ae_140/reni-ae/", "name": "Our Model 100", "model_type":"VENI"},
+    #{"model": "outputs/ae_139/reni-ae/", "name": "Our Model 49", "model_type":"VENI"},
+    #{"model": "outputs/ae_138/reni-ae/", "name": "Our Model 9", "model_type":"VENI"},
     
 
-    {"model": "output/model/reni_plus_plus_models/latent_dim_100/", "name": "RENI++ 100", "model_type":"RENI"},
-    {"model": "output/model/reni_plus_plus_models/latent_dim_49/", "name": "RENI++ 49", "model_type":"RENI"},
-    {"model": "output/model/reni_plus_plus_models/latent_dim_9/", "name": "RENI++ 9", "model_type":"RENI"},
+    #{"model": "output/model/reni_plus_plus_models/latent_dim_100/", "name": "RENI++ 100", "model_type":"RENI"},
+    #{"model": "output/model/reni_plus_plus_models/latent_dim_49/", "name": "RENI++ 49", "model_type":"RENI"},
+    #{"model": "output/model/reni_plus_plus_models/latent_dim_9/", "name": "RENI++ 9", "model_type":"RENI"},
 ]
 
 for m in models:
@@ -74,7 +96,7 @@ def load_dataloader(test_mode: Literal["val", "test"], eval_mask_path = None):
             val_in_ldr=False,
             eval_mask_path = eval_mask_path,
         ),
-        pixel_sampler=VENIEquirectangularPixelSamplerConfig(
+        pixel_sampler=RENIEquirectangularPixelSamplerConfig(
             full_image_per_batch=True,
             images_per_batch=images_per_batch,  # if full_image_per_batch
             is_equirectangular=True,

@@ -72,6 +72,20 @@ pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"
 - `-lcuda not found` 
   - Solution: `ln -s {cuda directory}/lib/stubs/libcuda.so {cuda directory}/lib/libcuda.so`
 
+## Download Data and Pretrained Models
+
+```bash
+# Download RENI++ Dataset
+python3 ns_reni/scripts/download_data.py ./data/
+
+# (optional) Download RENI++ models for comparison with our models
+python3 ns_reni/scripts/download_models.py ./outputs/reni/
+
+# Download VENI Models
+wget -O veni_models.zip "https://www.dropbox.com/scl/fi/bekgqob30xjdxb1bjormf/veni_models.zip?rlkey=q6zu6myd0o0zn5gpbd41mskff&st=6oqxw1xq&dl=1"
+unzip veni_models.zip -d ./outputs/veni/
+```
+
 ## Train the model:
 
 To train our VENI Model, run:
